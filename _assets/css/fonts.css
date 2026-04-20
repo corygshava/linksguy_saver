@@ -1,0 +1,40 @@
+/* fonts.css */
+@font-face {
+	font-family: 'Inter_18pt';
+	src: url('../fonts/Inter_18pt-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Inter_24pt';
+	src: url('../fonts/Inter_24pt-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Inter_28pt';
+	src: url('../fonts/Inter_28pt-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'yukita';
+	src: url('../fonts/YukitaSans-Medium.otf') format('truetype');
+}
+
+@font-face {
+	font-family: 'yukita heading';
+	src: url('../fonts/YukitaSans-ExtraBold.otf') format('truetype');
+}
+
+@font-face {
+	font-family: 'yukita body';
+	src: url('../fonts/YukitaSans-Regular.otf') format('truetype');
+}
+
+@font-face {
+	font-family: 'terminal dosis';
+	src: url('../fonts/TerminalDosis-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'montserat';
+	src: url('../fonts/Montserrat-SemiBold.otf') format('truetype');
+}
