@@ -21,6 +21,7 @@
 		public static $allstuff = [
 			"fileops" => __DIR__.'/fileops/main.php',
 			"meklog" => __DIR__.'/_includes/meklog.php',
+			"encryptor" => __DIR__.'/encryptor/main.php',
 		];
 
 		public static function load_package($pkg,$classname=null,&$instance=null){

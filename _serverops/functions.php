@@ -1,8 +1,10 @@
 <?php
 
 	require_once __DIR__.'/../_packages/loader.php';
+	maloader::load_package('fileops','fl_',$fl);
 
-	function update_json($path,$value=null,$unique = false){
+	function update_json($path,$value=null,$unique = false) {
+		// global $fl;
 		$fl = new fl_();
 
 		// create json if it doesnt exist
@@ -22,6 +24,8 @@
 		}
 		$data[] = $value;
 
-		// save to likes.json
+		// save to .json
 		$res = $fl::safewrite_txt($path,json_encode($data, JSON_PRETTY_PRINT),true,12);
+
+		return $res;
 	}

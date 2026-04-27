@@ -1,5 +1,4 @@
 <?php
-
     class simplifier extends fileops{
 		public static function c_file(string $path, string &$error = null): bool {
 			return self::create_file_if_missing($path,$error);
