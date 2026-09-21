@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>_H linksguy | Smart Link Saver</title>
+    
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --maxw: 600px;
+            --clr-bg: #0a0a0f;
+            --clr-panel: #111118;
+            --clr-text: #ffffff;
+            --clr-text-muted: rgba(255, 255, 255, 0.6);
+            --clr-border: rgba(255, 255, 255, 0.08);
+            --themecolor: #b44dff;
+            --roundness: 12px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --clr-bg: #f5f5f7;
+            --clr-panel: #ffffff;
+            --clr-text: #1a1a1a;
+            --clr-text-muted: rgba(0, 0, 0, 0.6);
+            --clr-border: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--clr-bg);
+            color: var(--clr-text);
+            min-height: 100vh;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        /* Custom Utility Classes */
+        .flowline {
+            display: flex;
+            align-items: center;
+        }
+        .spread {
+            justify-content: space-between;
+        }
+        .centerline {
+            align-items: center;
+        }
+        .gap-sm { gap: 0.5rem; }
+        .gap-tn { gap: 0.25rem; }
+        .spacy-sm { padding: 1rem; }
+        .spacy-tn { padding: 0.5rem; }
+        .distance-sm { margin-top: 1rem; }
+        .distance-md { margin-top: 1.5rem; }
+        .themeround { border-radius: var(--roundness); }
+        .panelbg {
+            background: var(--clr-panel);
+            border: 1px solid var(--clr-border);
+        }
+        ._panelbg {
+            background: var(--clr-panel);
+        }
+        ._shadow-sm {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .themetxt {
+            color: var(--themecolor);
+        }
+        .centroid {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 4rem;
+            padding-bottom: 2rem;
+        }
+
+        .content {
+            max-width: var(--maxw);
+            width: 100%;
+        }
+        .content > div {
+            width: 100%;
+        }
+
+        .headguy {
+            text-align: center;
+        }
+
+        /* Link Cards */
+        [data-subrole="link"] {
+            cursor: pointer;
+            padding: 12px 16px;
+            overflow: hidden;
+            border: 1px solid rgba(80, 80, 80, 0.30);
+            transition: all var(--transition);
+            position: relative;
+        }
+        [data-subrole="link"] * {
+            color: var(--clr-text);
+        }
+        [data-subrole="link"] .actions {
+            translate: 70px 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: all var(--transition);
+        }
+        [data-subrole="link"]:hover {
+            border: 1px solid var(--themecolor);
+            box-shadow: 0 0 16px rgba(180, 77, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        [data-subrole="link"]:hover .actions {
+            translate: 0 0;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .link-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: var(--clr-border);
+            flex-shrink: 0;
+        }
+
+        .link-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-caption {
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.25rem;
+        }
+
+        .link-meta {
+            font-size: 0.75rem;
+            color: var(--clr-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .link-category-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(180, 77, 255, 0.15);
+            color: var(--themecolor);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* Categories */
+        #categoriesholder > div {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 1rem;
+        }
+        #categoriesholder .category {
+            padding: 6px 12px;
+            border: 1px solid var(--themecolor);
+            border-radius: var(--roundness);
+            background: transparent;
+            color: var(--themecolor);
+            transition: all var(--transition);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        #categoriesholder .category:hover {
+            transform: scale(1.05);
+        }
+        #categoriesholder .category:hover,
+        #categoriesholder .category.active {
+            background: var(--themecolor);
+            color: #fff;
+            border: 1px solid var(--themecolor);
+        }
+        #categoriesholder .category > * {
+            translate: 0 -1px;
+        }
+
+        /* Action Buttons */
+        .opbtn {
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            transition: all var(--transition);
+            cursor: pointer;
+            color: var(--clr-text);
+        }
+        .opbtn:hover {
+            background: rgba(180, 77, 255, 0.1);
+            border-color: var(--themecolor);
+            color: var(--themecolor);
+        }
+        .opbtn.delete:hover {
+            background: rgba(255, 77, 106, 0.1);
+            border-color: #ff4d6a;
+            color: #ff4d6a;
+        }
+
+        /* Form Controls */
+        .form-control-custom {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--clr-border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--clr-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all var(--transition);
+        }
+        .form-control-custom:focus {
+            border-color: var(--themecolor);
+            background: rgba(180, 77, 255, 0.03);
+            box-shadow: 0 0 0 3px rgba(180, 77, 255, 0.1);
+        }
+        .form-control-custom::placeholder {
+            color: var(--clr-text-muted);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--clr-text-muted);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* Buttons */
+        .mybtn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .mybtn.primary {
+            background: var(--themecolor);
+            color: white;
+        }
+        .mybtn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(180, 77, 255, 0.3);
+        }
+        .mybtn.secondary {
+            background: transparent;
+            border: 1px solid var(--clr-border);
+            color: var(--clr-text);
+        }
+        .mybtn.secondary:hover {
+            border-color: var(--themecolor);
+            color: var(--themecolor);
+        }
+
+        /* Search Box */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--clr-border);
+            border-radius: 10px;
+            padding: 6px 12px;
+            transition: all var(--transition);
+        }
+        .search-box:focus-within {
+            border-color: var(--themecolor);
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: var(--clr-text);
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            width: 150px;
+            font-size: 0.85rem;
+        }
+        .search-box input::placeholder {
+            color: var(--clr-text-muted);
+        }
+        .search-box button {
+            background: transparent;
+            border: none;
+            color: var(--clr-text-muted);
+            cursor: pointer;
+            padding: 0;
+        }
+
+        /* Collapser */
+        .collapser > a {
+            text-decoration: none;
+            color: var(--clr-text);
+            transition: color var(--transition);
+        }
+        .collapser > a:hover {
+            color: var(--themecolor);
+        }
+        .collapser .myicon {
+            transition: transform var(--transition);
+        }
+        .collapser[aria-expanded="true"] .myicon {
+            transform: rotate(180deg);
+        }
+
+        /* Mode Toggle */
+        .btn-dark {
+            background: var(--clr-panel);
+            border: 1px solid var(--clr-border);
+            color: var(--clr-text);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-dark:hover {
+            border-color: var(--themecolor);
+            color: var(--themecolor);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--clr-text-muted);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--themecolor);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .toast-msg {
+            background: var(--clr-panel);
+            border: 1px solid var(--clr-border);
+            border-left: 3px solid var(--themecolor);
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+        .toast-msg.error {
+            border-left-color: #ff4d6a;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .centroid {
+                padding-top: 3rem;
+            }
+            .content {
+                padding: 0 1rem;
+            }
+            .search-box input {
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mode Toggle -->
+    <div class="flowline gap-sm spacy-tn" style="position: fixed;top: 0;left: 0;z-index: 100;">
+        <button class="btn-dark" id="mode_indicator" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <div class="container-fluid flow centroid">
+        <div class="content">
+            <!-- Header -->
+            <div class="headguy _panelbg _shadow-sm spacy-sm distance-md themeround">
+                <span class="h3"><b class="themetxt">_H</b> linksguy</span>
+            </div>
+
+            <!-- Add Link Section -->
+            <div class="input_area distance-sm themeround collapser panelbg">
+                <a class="text-decoration-none spacy-sm flowline spread centerline" href="#addArea" data-toggle="collapse" data-target="#addArea" aria-expanded="false">
+                    <span class="text-uppercase font-weight-bold">Add link</span>
+                    <i class="fas fa-chevron-down myicon"></i>
+                </a>
+                <form class="collapse panelbg themeround" id="addArea" onsubmit="handleFormSubmit(event)">
+                    <div class="spacy-sm">
+                        <input type="hidden" id="editId" value="">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="thecap">Caption</label>
+                                <input type="text" class="form-control-custom" id="thecap" name="thecap" placeholder="What is this link for?" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="thecat">Category</label>
+                                <select class="form-control-custom" id="thecat" name="thecat" required>
+                                    <option value="">Select category...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="theurl">URL</label>
+                            <input type="url" class="form-control-custom" id="theurl" name="theurl" placeholder="https://example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="theimg">Image URL <span style="color: var(--clr-text-muted); font-weight: 400; text-transform: none;">(optional)</span></label>
+                            <input type="url" class="form-control-custom" id="theimg" name="theimg" placeholder="https://example.com/image.jpg">
+                        </div>
+
+                        <div class="flowline spread centerline">
+                            <button type="button" class="mybtn secondary" data-toggle="collapse" data-target="#addArea">
+                                Cancel
+                            </button>
+                            <button type="submit" class="mybtn primary" id="submitBtn">
+                                <i class="fas fa-plus"></i> <span>Add Link</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Links Section -->
+            <div class="links_area distance-sm themeround collapser panelbg">
+                <div class="spacy-sm flowline spread centerline">
+                    <div>
+                        <span class="h4">Saved links</span>
+                    </div>
+                    <div class="flowline gap-sm">
+                        <div class="search-box">
+                            <input type="text" placeholder="Quick search..." id="quickSearch" oninput="renderLinks()">
+                            <button><i class="fas fa-search"></i></button>
+                        </div>
+                        <a href="#categoriesholder" data-toggle="collapse" data-target="#categoriesholder" aria-expanded="false">
+                            <i class="fas fa-chevron-down myicon"></i>
+                        </a>
+                    </div>
+                </div>
+                <div id="categoriesholder" class="collapse">
+                    <div class="pl-3 flowline gap-tn">
+                        <!-- Categories render here -->
+                    </div>
+                </div>
+                <div id="linksholder" class="spacy-sm" data-role="linksguy">
+                    <!-- Links render here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // ============================================
+        // DATA & STATE
+        // ============================================
+        let links = JSON.parse(localStorage.getItem('linksguy_links')) || [];
+        let categories = JSON.parse(localStorage.getItem('linksguy_categories')) || ['new', 'misc', 'design', 'dev', 'tools'];
+        let activeFilter = 'all';
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            // Load theme
+            const savedTheme = localStorage.getItem('linksguy_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon();
+
+            // Render
+            renderCategories();
+            renderLinks();
+            populateCategorySelect();
+        }
+
+        // ============================================
+        // THEME TOGGLE
+        // ============================================
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('linksguy_theme', newTheme);
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const icon = document.querySelector('#mode_indicator i');
+            icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // ============================================
+        // STORAGE
+        // ============================================
+        function saveToStorage() {
+            localStorage.setItem('linksguy_links', JSON.stringify(links));
+            localStorage.setItem('linksguy_categories', JSON.stringify(categories));
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function getDomain(url) {
+            try {
+                return new URL(url).hostname.replace('www.', '');
+            } catch {
+                return url;
+            }
+        }
+
+        // ============================================
+        // RENDER
+        // ============================================
+        function renderLinks() {
+            const holder = document.getElementById('linksholder');
+            const searchTerm = document.getElementById('quickSearch').value.toLowerCase();
+
+            let filtered = links.filter(link => {
+                const matchesSearch = link.caption.toLowerCase().includes(searchTerm) ||
+                                     link.url.toLowerCase().includes(searchTerm) ||
+                                     link.category.toLowerCase().includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || link.category === activeFilter;
+                return matchesSearch && matchesFilter;
+            });
+
+            // Sort by date (newest first)
+            filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            if (filtered.length === 0) {
+                holder.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>${links.length === 0 ? 'No links saved yet. Add your first link!' : 'No links match your search.'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            holder.innerHTML = filtered.map(link => {
+                const thumbSrc = link.image || `https://ui-avatars.com/api/?background=b44dff&color=fff&name=${encodeURIComponent(getDomain(link.url))}&size=80&font-size=0.4`;
+                return `
+                    <div class="themeround flowline spread centerline mb-2" data-subrole="link" data-myid="${link.id}" onclick="openLink(event, '${link.id}')">
+                        <div class="flowline gap-sm" style="flex: 1; min-width: 0;">
+                            <img src="${thumbSrc}" alt="${link.caption}" class="link-thumb" onerror="this.src='https://ui-avatars.com/api/?background=b44dff&color=fff&name=${encodeURIComponent(getDomain(link.url))}&size=80&font-size=0.4'">
+                            <div class="link-info">
+                                <div class="link-caption">${escapeHtml(link.caption)}</div>
+                                <div class="link-meta">
+                                    <span class="link-category-badge">${escapeHtml(link.category)}</span>
+                                    <span>${getDomain(link.url)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="actions flowline gap-tn">
+                            <button class="opbtn" onclick="event.stopPropagation(); goToLink('${link.id}')" title="Open link">
+                                <i class="fas fa-external-link-alt"></i>
+                            </button>
+                            <button class="opbtn" onclick="event.stopPropagation(); editLink('${link.id}')" title="Edit">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button class="opbtn delete" onclick="event.stopPropagation(); deleteLink('${link.id}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCategories() {
+            const holder = document.querySelector('#categoriesholder > div');
+            const usedCategories = [...new Set(links.map(l => l.category))];
+            
+            let html = `<button class="btn flowline centerline category ${activeFilter === 'all' ? 'active' : ''}" onclick="filterCategory('all')">
+                <b>all</b>
+            </button>`;
+
+            usedCategories.forEach(cat => {
+                const count = links.filter(l => l.category === cat).length;
+                html += `
+                    <button class="btn flowline centerline category ${activeFilter === cat ? 'active' : ''}" onclick="filterCategory('${escapeHtml(cat)}')">
+                        <b>${escapeHtml(cat)} (${count})</b>
+                    </button>
+                `;
+            });
+
+            holder.innerHTML = html;
+        }
+
+        function populateCategorySelect() {
+            const select = document.getElementById('thecat');
+            select.innerHTML = '<option value="">Select category...</option>';
+            categories.forEach(cat => {
+                select.innerHTML += `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`;
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============================================
+        // ACTIONS
+        // ============================================
+        function filterCategory(category) {
+            activeFilter = category;
+            renderCategories();
+            renderLinks();
+        }
+
+        function openLink(event, id) {
+            if (event.target.closest('.actions')) return;
+            const link = links.find(l => l.id === id);
+            if (link) {
+                window.open(link.url, '_blank', 'noopener,noreferrer');
+            }
+        }
+
+        function goToLink(id) {
+            const link = links.find(l => l.id === id);
+            if (link) {
+                window.open(link.url, '_blank', 'noopener,noreferrer');
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const editId = document.getElementById('editId').value;
+            const caption = document.getElementById('thecap').value.trim();
+            const category = document.getElementById('thecat').value.trim();
+            const url = document.getElementById('theurl').value.trim();
+            const image = document.getElementById('theimg').value.trim();
+
+            if (!caption || !category || !url) {
+                showToast('Please fill in all required fields.', 'error');
+                return;
+            }
+
+            if (editId) {
+                // Update existing
+                const index = links.findIndex(l => l.id === editId);
+                if (index !== -1) {
+                    links[index] = { ...links[index], caption, category, url, image, updatedAt: new Date().toISOString() };
+                    showToast('Link updated successfully!');
+                }
+            } else {
+                // Add new
+                const newLink = {
+                    id: generateId(),
+                    caption,
+                    category,
+                    url,
+                    image,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                links.push(newLink);
+
+                // Add category if new
+                if (!categories.includes(category)) {
+                    categories.push(category);
+                }
+
+                showToast('Link saved successfully!');
+            }
+
+            saveToStorage();
+            renderLinks();
+            renderCategories();
+            populateCategorySelect();
+            resetForm();
+            
+            // Close collapse
+            $('#addArea').collapse('hide');
+        }
+
+        function editLink(id) {
+            const link = links.find(l => l.id === id);
+            if (!link) return;
+
+            document.getElementById('editId').value = link.id;
+            document.getElementById('thecap').value = link.caption;
+            document.getElementById('thecat').value = link.category;
+            document.getElementById('theurl').value = link.url;
+            document.getElementById('theimg').value = link.image || '';
+            
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-check"></i> <span>Update Link</span>';
+            
+            // Open collapse
+            $('#addArea').collapse('show');
+            
+            // Scroll to form
+            document.querySelector('.input_area').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function deleteLink(id) {
+            const link = links.find(l => l.id === id);
+            if (!link) return;
+
+            if (confirm(`Delete "${link.caption}"? This action cannot be undone.`)) {
+                links = links.filter(l => l.id !== id);
+                saveToStorage();
+                renderLinks();
+                renderCategories();
+                showToast('Link deleted.');
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('addArea').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus"></i> <span>Add Link</span>';
+        }
+
+        // ============================================
+        // TOAST
+        // ============================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast-msg ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100px)';
+                toast.style.transition = '0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ============================================
+        // KEYBOARD SHORTCUTS
+        // ============================================
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + K to open add form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                $('#addArea').collapse('show');
+                setTimeout(() => document.getElementById('thecap').focus(), 300);
+            }
+            // Escape to close form
+            if (e.key === 'Escape') {
+                $('#addArea').collapse('hide');
+            }
+        });
+
+        // ============================================
+        // INIT
+        // ============================================
+        init();
+
+        // Add demo links if empty
+        if (links.length === 0) {
+            links = [
+                {
+                    id: generateId(),
+                    caption: 'Bootstrap Documentation',
+                    category: 'dev',
+                    url: 'https://getbootstrap.com/docs/4.5/getting-started/introduction/',
+                    image: '',
+                    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    caption: 'FontAwesome Icons',
+                    category: 'tools',
+                    url: 'https://fontawesome.com/icons',
+                    image: '',
+                    createdAt: new Date(Date.now() - 86400000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    caption: 'Dribbble Inspiration',
+                    category: 'design',
+                    url: 'https://dribbble.com',
+                    image: '',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+            saveToStorage();
+            renderLinks();
+            renderCategories();
+        }
+    </script>
+</body>
+</html>

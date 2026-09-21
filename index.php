@@ -57,15 +57,60 @@
 		[data-subrole="link"]{
 			cursor: pointer;
 			padding: 8px 16px;
+			overflow: hidden;
+			border: 1px solid transparent;
+			border: 1px solid rgba(80, 80, 80, 0.30);
+		}
+		[data-subrole="link"] * {
+			color: var(--clr-text);
+		}
+		[data-subrole="link"] .actions{
+			translate: 70px 0;
+			opacity: 0;
+			pointer-events: none;
 		}
 		[data-subrole="link"]:hover{
 			border: 1px solid transparent;
 			box-shadow: 0 0 12px rgba(120,120,120,0.3);
 		}
+		[data-subrole="link"]:hover .actions{
+			translate: 0 0;
+			opacity: 1;
+			pointer-events: all;
+		}
+
+		#categoriesholder>div{
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+		}
+		#categoriesholder .category{
+			/*display: inline-flex;*/
+			padding: 3px 8px;
+			border: 1px solid var(--themecolor);
+			border-radius: var(--roundness);
+			background: transparent;
+			color: var(--themecolor);
+			transition: 0.3s;
+		}
+		#categoriesholder .category:hover{
+			scale: 1.1;
+		}
+		#categoriesholder .category:hover,#categoriesholder .category.active{
+			/*display: inline-flex;*/
+			background: var(--themecolor);
+			color: #fff;
+			border: 1px solid var(--themecolor);
+		}
+		#categoriesholder .category>*{
+			translate: 0 -2px;
+		}
 
 		.opbtn{
+			background: transparent;
 			border: 1px solid transparent;
-			padding: 8px 12px;
+			padding: 4px 8px;
+			font-size: 0.8rem;
 		}
 	</style>
 </head>
@@ -75,46 +120,82 @@
 	</div>
 	<div class="container-fluid flow centroid">
 		<div class="content">
-			<div class="headguy panelbg shadow-sm spacy-md distance-md themeround">
-				<span class="h3">Link logger</span>
+			<div class="headguy _panelbg _shadow-sm spacy-sm distance-md themeround">
+				<span class="h3"><b class="themetxt">_H</b> linksguy</span>
 			</div>
 
 			<div class="input_area distance-sm themeround collapser panelbg">
 				<a class="text-decoration-none spacy-sm flowline spread centerline" href="#addArea" data-toggle="collapse" data-target="#addArea">
-					<span class="text-uppercase text-muted font-weight-bold">Add link</span>
+					<span class="text-uppercase font-weight-bold">Add link</span>
 					<i class="fa fa-chevron-down myicon"></i>
 				</a>
-				<form class="collapse panelbg spacy-sm themeround" id="addArea">
-					<div class="form-group">
-						<label class="form-label" for="thecap">caption</label>
-						<input type="text" class="form-control-custom" id="thecap" name="thecap" placeholder="what is this link for?">
-					</div>
-					<div class="form-group">
-						<label class="form-label" for="thelink">url</label>
-						<input type="url" class="form-control-custom" id="thelink" name="thelink" placeholder="your link" required>
-					</div>
-					<div class="flowline right">
-						<button class="mybtn secondary" onclick="viewClient_samples(${sample.owner.id})" data-openthis="addArea">
-							<i class="fas fa-plus"></i> add link
-						</button>
+				<form class="collapse panelbg themeround" id="addArea" data-preventDefault="yes">
+					<div class="spacy-sm">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label class="form-label" for="thecap">caption</label>
+								<input type="text" class="form-control-custom" id="thecap" name="thecap" placeholder="what is this link for?">
+							</div>
+							<div class="form-group col-md-6">
+								<label class="form-label" for="thelink">category</label>
+								<select type="url" class="form-control-custom" id="thelink" name="thelink" placeholder="your link" required>
+									<option>new</option>
+									<option>misc</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="form-label" for="thelink">url</label>
+							<input type="url" class="form-control-custom" id="thelink" name="thelink" placeholder="your link" required>
+						</div>
+
+						<div class="flowline right">
+							<button class="mybtn secondary" data-toggle="collapse" data-target="#addArea">
+								cancel
+							</button>
+							<button class="mybtn primary">
+								<i class="fas fa-plus"></i> <t>add link</t>
+							</button>
+						</div>
 					</div>
 				</form>
 			</div>
 
-			<div class="links_area distance-sm themeround collapser panelbg">
-				<div class="spacy-sm flowline spread">
+			<div class="links_area distance-sm themeround collapser panelbg collapser">
+				<div class="spacy-sm flowline spread centerline">
 					<div>
 						<span class="h4">saved links</span>
 					</div>
-					<div>
+					<div class="flowline gap-sm">
 						<div class="search-box">
 							<input type="text" placeholder="Quick search..." id="quickSearch">
 							<button><i class="fas fa-search"></i></button>
 						</div>
+						<a class="" data-toggle="collapse" data-target="#categoriesholder">
+							<i class="fa fa-chevron-down myicon"></i>
+						</a>
+					</div>
+				</div>
+				<div id="categoriesholder" class="collapse">
+					<div class="pl-3 flowline gap-tn">
+						<button class="btn flowline centerline category 0 active"><b>all</b></button>
+						<button class="btn flowline centerline category 0"><b>new</b></button>
+						<button class="btn flowline centerline category 1"><b>misc</b></button>
+						<button class="btn flowline centerline category 2"><b>ccc</b></button>
 					</div>
 				</div>
 				<div id="linksholder" class="spacy-sm" data-role="linksguy">
-					<div class="border themeround flowline spread centerline mb-2" data-subrole="link" data-myid="0">
+					<div class="themeround flowline spread centerline mb-2" data-subrole="link" data-myid="0">
+						<div>
+							<b>New link</b>
+						</div>
+						<div class="actions">
+							<button class="opbtn themeround w3-hover-blue"><i class="fa fa-external-link-alt"></i></button>
+							<button class="opbtn themeround w3-hover-blue"><i class="fa fa-pencil-alt"></i></button>
+							<button class="opbtn themeround w3-hover-red"><i class="fa fa-trash"></i></button>
+						</div>
+					</div>
+					<div class="themeround flowline spread centerline mb-2" data-subrole="link" data-myid="0">
 						<div>
 							<b>New link</b>
 						</div>
@@ -123,16 +204,7 @@
 							<button class="opbtn themeround w3-hover-blue"><i class="fa fa-external-link-alt"></i></button>
 						</div>
 					</div>
-					<div class="border themeround flowline spread centerline mb-2" data-subrole="link" data-myid="0">
-						<div>
-							<b>New link</b>
-						</div>
-						<div class="actions">
-							<button class="opbtn themeround w3-hover-red"><i class="fa fa-trash"></i></button>
-							<button class="opbtn themeround w3-hover-blue"><i class="fa fa-external-link-alt"></i></button>
-						</div>
-					</div>
-					<div class="border themeround flowline spread centerline mb-2" data-subrole="link" data-myid="0">
+					<div class="themeround flowline spread centerline mb-2" data-subrole="link" data-myid="0">
 						<div>
 							<b>New link</b>
 						</div>
@@ -155,7 +227,12 @@
 
 			window[fetch_bypass]('./op/get_links',payld,'GET').then(d => {
 				responseHandler(d,runafter,d);
-			});
+			})
+			.catch(err => {
+				console.error(err);
+				alert_danger(err.message);
+			})
+			;
 
 			const runafter = (d) => {
 				alert_dark('rendering links');
@@ -166,6 +243,9 @@
 			alert_dark('initialising');
 			getlinks();
 		}
+
+		// links mgt ops
+			// 
 
 		// dark / light mode switch setup
 			let cur_ui_mode = "dark";

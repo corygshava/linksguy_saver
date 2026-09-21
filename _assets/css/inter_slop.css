@@ -127,6 +127,11 @@ body[data-mode="dark"]{
 		opacity: 0.3;
 	}
 
+/* collapsers */
+	.collapser:has(.collapse.show) .myicon{
+		transform: rotate(180deg);
+	}
+
 /* misc */
 	/* search box */
 		.search-box {
