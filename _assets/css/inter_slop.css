@@ -31,58 +31,6 @@ body[data-mode="dark"]{
 
 
 /* buttons */
-	.mybtn {
-		border: none;
-		padding: .55rem 20px;
-		border-radius: var(--roundness);
-		font-weight: 500;
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		gap: 8px;
-		transition: all 0.3s;
-		cursor: pointer;
-	}
-	.mybtn:hover{scale: 1.03;}
-	.mybtn.primary{
-		background: var(--themecolor);
-		color: white;
-	}
-	.mybtn.primary:hover{
-		background: var(--darkcolor);
-		color: white;
-		box-shadow: var(--themeshadow);
-		text-decoration: none;
-	}
-	.mybtn.trans{
-		background: none;
-		color: white;
-	}
-	.mybtn.sm {
-		padding: 8px 16px;
-	}
-	.mybtn.secondary,.mybtn.outline{
-		border: 1px solid var(--themecolor);
-		color: var(--themecolor);
-		background: var(--clr-alttext);
-	}
-	.mybtn.secondary:hover,.mybtn.outline:hover{
-		background: var(--themecolor);
-		border: 1px solid var(--themecolor);
-		color: white;
-		box-shadow: var(--themeshadow);
-		text-decoration: none;
-	}
-	.mybtn.danger{
-		color: #fff;
-		background: var(--danger);
-	}
-	.mybtn.danger:hover{
-		background: var(--red);
-		color: white;
-		/*box-shadow: var(--themeshadow);*/
-		text-decoration: none;
-	}
 	.backbtn {
 		padding: 8px 12px;
 		display: inline-block;
@@ -95,6 +43,14 @@ body[data-mode="dark"]{
 		text-decoration: none;
 		color: #fff;
 		background-color: var(--darkcolor);
+	}
+
+	.mybadge{
+	    padding: 2px 4px;
+	    background: var(--theme-glass);
+	    border-radius: var(--roundness);
+	    font-size: .7rem;
+	    color: var(--themecolor) !important;
 	}
 
 /* Forms */

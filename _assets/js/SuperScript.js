@@ -2,6 +2,7 @@
 	*	Hi there, Cory here, this is a script full of functions to make your work  easier
 	*	Go check out www.nebulaworks.42web.io/res/ to find out how to use it or download the latest version
 	*	last modified on 12/nov/24 at 11:49
+	*	small mod on 3rd August 2026
 	*	enjoy
 */
 
@@ -112,6 +113,33 @@ function tabSwitch(no,series,norm,select) {
 		items[i].className = norm;
 	}
 	items[no].className += ' ' + select;
+}
+
+function tabSwitch2(no,series,norm,select) {
+	var items = document.querySelectorAll(series);
+	// no -= 1;
+
+	if(no > items.length){
+		no = no % items.length;
+	}
+
+	console.log(items,no)
+
+	if(items.length > 0){
+		if(items[no] == undefined){
+			console.log("item doesnt exist")
+			return;
+		}
+	} else{
+		console.log("items dont exist")
+		return;
+	}
+
+	for (var i = 0; i < items.length; i++) {
+		items[i].style.display = norm;
+	}
+
+	items[no].style.display = select;
 }
 
 function toggleContent(what,part1,part2,mth) {
@@ -460,7 +488,7 @@ function startCountdown(targetDate,format,ifexpired,suffix) {
 				suffix;
 		} else {
 			outxt = `${days}:` +
-				`${String(hours).padStart(2, '0')}: ` +
+				`${String(hours).padStart(2, '0')}:` +
 				`${String(minutes).padStart(2, '0')}:` +
 				`${String(seconds).padStart(2, '0')}` +
 				suffix;

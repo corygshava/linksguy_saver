@@ -57,11 +57,12 @@
 		http_response_code(404);
 		$cont = [
 			"message" => "item not found",
-			"path" => $fyl,
+			// "path" => $fyl,
 		];
 	}
 
-	$err[] = ['cont' => $cont];
+	// $err[] = ['cont' => $cont];
+	$err = ['cont' => $cont];
 	echo json_encode($err, JSON_PRETTY_PRINT);
 	exit();
 ?>
