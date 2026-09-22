@@ -18,9 +18,9 @@
 
 	// new instance for conditionals
 	$clt = (clone $links);
+	$clt->use_as_is = true;
 
 	if($cat_id){
-		$clt->use_as_is = true;
 		$link_send = $clt->where('category_id','=',$cat_id)->with('my_category')->paginate($limit);
 	}
 
