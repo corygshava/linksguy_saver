@@ -44,7 +44,7 @@
 		}
 
 		body{
-			font-family: 'inter_24pt','tw cen mt',calibri;
+			/* font-family: 'inter_24pt','tw cen mt',calibri; */
 		}
 		.content{
 			max-width: var(--maxw);
@@ -132,13 +132,13 @@
 	</style>
 </head>
 <body>
-	<div class="flowline gap-sm spacy-tn" style="position: fixed;top: 0;left: 0;">
+	<div class="flowline gap-sm spacy-tn" style="position: fixed;top: 0;left: 0;z-index: 3;">
 		<button class="btn circle_btn altmodetxt bg-dark" data-myclass="btn circle_btn" data-runme="toggle_ui_mode" id="mode_indicator"><i class="fa fa-moon"></i></button>
 	</div>
 	<div class="container-fluid flow centroid">
 		<div class="content">
 			<div class="headguy _panelbg _shadow-sm spacy-sm distance-md themeround">
-				<span class="h3"><b class="themetxt">_H</b> linksguy</span>
+				<span class="h3"><b class="themetxt logotxt">_H</b> linksguy</span>
 			</div>
 
 			<div class="topnav flowline spread overflow">
@@ -189,10 +189,13 @@
 			</div>
 			-->
 
-			<div class="links_area distance-sm themeround collapser panelbg collapser w3-display-container">
+			<div class="links_area distance-sm themeround collapser panelbg_ collapser w3-display-container">
+				<div class="spacy-sm">
+					<span class="h4">Your links</span>
+				</div>
 				<div class="spacy-sm flowline spread centerline overflow">
 					<div>
-						<span class="h4">Filters</span>
+						<b>Filters</b>
 					</div>
 					<div class="flowline gap-sm">
 						<div class="search-box">
@@ -218,9 +221,6 @@
 			</div>
 
 			<div class="thelinks">
-				<div class="spacy-sm">
-					<span class="h4">Your links</span>
-				</div>
 				<div id="linksholder" class="spacy-sm_ pb-4" data-role="linksguy">
 				</div>
 			</div>
@@ -248,6 +248,8 @@
 	</div>
 
 	<script>
+		fbk_app_alias = "linksaver_guy";
+
 		let ui_cats = undefined;
 		let ui_links = undefined;
 		let ui_search_npt = undefined;
