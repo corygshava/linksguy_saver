@@ -1235,3 +1235,115 @@ var confirm_toggler = undefined;
 			killghost('confirmPasswordCallback');
 		}
 
+	// feedback collector setup
+		let fbk_delay = 4000;
+		let fbk_savetime = 1000 * 60 * 60 * 48;
+		let fbk_app_alias = 'hyperworks_home';
+		let fbk_hide_pref = undefined;
+		let fbk_pref = undefined;
+		let fbk_info = undefined;
+		let fbk_hide = undefined;
+
+		let ui_fbk_verdict = undefined;
+		let ui_fbk = undefined;
+
+		function fbk_handle_reactpanel() {
+			const setup_ui = () => {
+				ui_fbk = document.querySelector(`[data-role="like_box"]`);
+				ui_fbk_verdict = ui_fbk.querySelector('[data-role="verdict"]');
+
+				fbk_pref = fbk_app_alias + '_fbk_info';
+				fbk_hide_pref = fbk_app_alias + '_fbk_hideit';
+				fbk_info = localStorage.getItem(fbk_pref);
+				fbk_hide = localStorage.getItem(fbk_hide_pref);
+
+				fbk_hide = fbk_hide == undefined ? false : JSON.parse(fbk_hide);
+			};
+			const handle_show = () => {
+				if(ui_fbk == undefined){
+					alert_silent('like box not found');
+					return;
+				}
+
+				if(fbk_hide === true){
+					alert_silent('like box hidden forever');
+					return;
+				}
+
+				if(fbk_info != undefined){
+					if((new Date(fbk_info.expiry_date)) > (new Date())){
+						alert_silent('feedback info recorded');
+						let typ = fbk_pref.last_reaction;
+						fbk_save_react(typ);
+						return;
+					} else {
+						localStorage.removeItem(fbk_pref)
+						setup_ui();
+					}
+				}
+
+				ui_fbk.classList.remove('w3-hide');
+			};
+
+			setup_ui();
+
+			setTimeout(() => {
+				handle_show();
+			}, fbk_delay)
+		}
+		function fbk_hide_likebox() {
+			const last_step = () => {
+				ui_fbk.animate([...slidein].reverse(), timing);
+
+				setTimeout(() => {
+					ui_fbk.classList.add('w3-hide');
+				}, timing.duration + 20);
+			}
+
+			const ban_like_box = () => {
+				localStorage.setItem(fbk_hide_pref, "true");
+				last_step();
+				alert_info('hiding forever');
+			}
+
+			if(fbk_info == undefined){
+				confirmAction('Dont show again','do you want the react panel to never show again?',() => {
+					ban_like_box();
+				});
+			}
+			last_step();
+		}
+		function fbk_like_project(el) {
+			let typ = el.dataset.mything;
+			let dta = {
+				type: typ,
+				loc: fbk_app_alias,
+			}
+
+			const finalizer = (b) => {
+				let ts = (new Date()).getTime();
+				let expiry_date = (new Date(ts + fbk_savetime)).toISOString();
+				let react_date = (new Date()).toISOString();
+				let data = {
+					react_date,
+					expiry_date,
+					last_reaction: typ,
+				};
+				let tosave = JSON.stringify(data);
+
+				localStorage.setItem(fbk_pref,tosave);
+				fbk_save_react(typ);
+			}
+
+			alert_info('saving reaction');
+
+			window[fetch_bypass]('./op/add_reaction',dta,'POST').then(d => {
+				responseHandler(d,finalizer,d);
+			}).catch(err => {
+				alert_silent(err.message);
+			})
+		}
+		const fbk_save_react = (t) => {
+			ui_fbk.classList.add('liked');
+			ui_fbk_verdict.innerHTML = `you ${t}d this, try again tomorrow`;
+		}
