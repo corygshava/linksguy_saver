@@ -13,7 +13,7 @@
 	--clr-bgglass: #aeaeae44;
 	--clr-border: #c0c0c0;
 	--clr-shadow: rgba(100,100,100,0.3);
-	--clr-modeglass: #d7d7d777;
+	--clr-modeglass: #1214259e;
 	--clr-panelbg: #fff;
 	--clr-darkglass: #000000aa;
 	--clr-whiteglass: #efefef55;
@@ -256,6 +256,15 @@ a{
 			transform: translateY(-3px);
 		}
 
+		.mybtn2.sm{
+			padding: 8px 12px;
+			font-size: 0.8rem;
+		}
+		.mybtn2.tn{
+			padding: 4px 8px;
+			font-size: 0.6rem;
+		}
+
 		.circle_btn{
 			--w: var(--size, 32px);
 			border-radius: 50% !important;
@@ -266,6 +275,25 @@ a{
 			justify-content: center;
 			border: 1px solid transparent;
 		}
+
+	/* ---------- 0.like_box ---------- */
+		.like_box{
+			position: fixed;
+			bottom: 85px;
+			right: 0;
+			max-width: 300px;
+			z-index: 7;
+		}
+		.like_box .inner{
+			border: 1px solid var(--clr-border);
+			border-radius: var(--roundness);
+			background-color: var(--clr-modeglass);
+			backdrop-filter: blur(8px);
+			position: relative;
+		}
+		.like_box .liketxt{display: none;}
+		.like_box.liked .liker{display: none;}
+		.like_box.liked .liketxt{display: block;}
 
 /* BS4 fixes */
 	.border{border: 1px solid var(--clr-border) !important;}

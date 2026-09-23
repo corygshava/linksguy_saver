@@ -224,6 +224,26 @@
 				<div id="linksholder" class="spacy-sm_ pb-4" data-role="linksguy">
 				</div>
 			</div>
+
+			<div class="like_box spacy-sm w3-hide" data-role="like_box">
+				<div class="inner spacy-sm slide-l">
+					<div class="w3-display-topright spacy-sm_">
+						<button class="mybtn trans" data-runme="fbk_hide_likebox"><i class="fas fa-times"></i></button>
+					</div>
+					<div class="border-bottom pb-3">
+						<span class="h4">Like this project</span>
+						<span>
+							did this project <b>help you</b>, <b>impress you</b> or annoy you or fill you with hope for the future, if it did let me know, I love hearing from my fans and haters alike.
+						</span>
+					</div>
+					<div class="flowline overflow gap-tn left pt-3">
+						<button class="mybtn2 tn secondary w3-hide_ liker" data-runme="fbk_like_project" data-mything="like"><i class="fas fa-thumbs-up"></i> like project</button>
+						<button class="mybtn2 tn secondary w3-hide_ liker" data-runme="fbk_like_project" data-mything="dislike"><i class="fas fa-thumbs-down"></i> dislike project</button>
+						<span class="text-muted liketxt" data-role="verdict"><b>you liked this, try again tomorrow</b></span>
+						<button class="mybtn2 tn primary themegrad" data-runme="fbk_leave_comment"><i class="fas fa-comment"></i> comment</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -790,6 +810,7 @@
 
 		callOnLoad.push({act: start});
 		callOnLoad.push({act: setup_uimode});
+		callOnLoad.push({act: fbk_handle_reactpanel});
 	</script>
 </body>
 </html>
