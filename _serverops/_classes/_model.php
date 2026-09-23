@@ -97,7 +97,11 @@
 				$oldme = $all[$my_n];
 				$this->_log(['oldme' => $oldme]);
 
-				$newme = [...$oldme,...$v];
+				$newme = [
+					...$oldme,
+					...$v,
+					'updated_at' => (new DateTime())->format(DateTime::ATOM),
+				];
 				$this->_log(['newme' => $newme]);
 
 				$all[$my_n] = $newme;
@@ -214,6 +218,8 @@
 				$this->get_metadata();
 				$newid = $this->allrecs + 1;
 				$wot['id'] = $newid;
+				$wot['created_at'] = (new DateTime())->format(DateTime::ATOM);
+				$wot['updated_at'] = (new DateTime())->format(DateTime::ATOM);
 
 				/*
 				if(!isset($wot['id'])){
